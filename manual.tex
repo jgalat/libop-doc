@@ -1,0 +1,120 @@
+\documentclass[12pt,a4paper,final]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{imakeidx}
+\usepackage[hidelinks]{hyperref}
+\usepackage[none]{hyphenat}
+\usepackage{alltt}
+\author{}
+\title{LibOP \\ Documentación técnica}
+\makeindex
+\date{}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\clearpage
+
+\section{Introducción}
+
+
+\subsection{Descripción}
+	%TODO que hace, en que está hecha? etc..
+	
+	
+\section{Compilación}
+	En subsecciones siguientes se listan los requerimientos a cumplir y las instrucciones
+	a correr necesarias para la correcta compilación de la librería en sistemas basados
+	en Linux y en Windows. 	 
+	
+	\subsection{Linux}
+		
+		\subsubsection{Requerimientos}
+			En sistemas derivados de Debian el único requerimiento es el conjunto de 
+			herramientas que vienen incluídas en el paquete \texttt{build-essential},
+			el cual puede ser instalado desde los repositorios
+			oficiales utilizando el comando:
+			
+			\begin{alltt}
+				sudo apt-get install build-essential
+			\end{alltt}	
+			
+		\subsubsection{Instrucciones}
+			Ubicado en la carpeta del proyecto clonado podremos compilar la librería corriendo:
+			
+			\begin{alltt}
+				cd build && make
+			\end{alltt}
+
+			Finalizado el comando obtendremos la librería compartida \texttt{libop.so}.
+
+	\subsection{Windows}
+		\subsubsection{Requerimientos}
+			En sistemas que utilicen Windows 7, 8.1 o 10 los siguientes requerimientos
+			son necesarios (a menos que se indique lo contrario) para la correcta compilación:
+			\begin{itemize}
+				\item \href{https://git-scm.com/download/win}{Git for Windows} (Opcional)
+				\item \href{http://gnuwin32.sourceforge.net/packages/make.htm}{GNU Make}
+				\item \href{https://sourceforge.net/projects/mingw-w64/}{Mingw-w64}
+			\end{itemize}
+		\subsubsection{Instrucciones}
+			Seguir las siguientes instrucciones.
+			
+			\begin{enumerate}
+				\item Instalar Git for Windows (opcional).
+				\item Instalar GNU Make.
+					\begin{itemize}
+						\item Añadir la carpeta \texttt{GnuWin32/bin} a la variable de entorno \texttt{PATH}.
+					\end{itemize}
+				\item Instalar Mingw-w64 con las opciones (7.1.0, x86\_64, posix, seh, 0). El número de versión puede variar.
+					\begin{itemize}
+						\item Añadir la carpeta \texttt{mingw-w64/x86\_64-7.1.0-posix-seh-rt\_05-rev0/mingw64/bin} a la variable de entorno \texttt{PATH}.
+					\end{itemize}
+				\item Clonar el proyecto mediante Git.
+				\item Ubicado en la carpeta del proyecto correr: 
+						\begin{alltt}
+							cd build \&\& make OS=win32
+						\end{alltt}			
+			\end{enumerate}
+		
+			Finalizado todo obtendremos la librería compartida \texttt{libop.dll}.
+			
+	\subsection{Opciones de compilación}
+		Se listan a continuación opciones que se pueden pasar al comando \texttt{make}.
+		
+		\begin{description}
+			\item [\texttt{make OS=\textbf{os}}] Especifica el sistema para el cual se desea compilar la librería.
+				Sus opciones son \texttt{unix} o \texttt{win32}. Siendo \texttt{unix} la opción por defecto.
+			\item [\texttt{make VERBOSE=bool}] Caso sea \texttt{True} la librería compilada incluirá código 
+				necesario para la impresión de mensajes de error a través de la salida estandar de errores. Ésto
+				puede ser útil para la búsqueda de errores. Su opción por defecto es \texttt{False}.
+			\item [\texttt{make export\_all}] Creará una carpeta \texttt{export} en la raíz del proyecto la 
+				cual incluirá la librería compilada y las cabeceras C a ser incluídas para su uso. Caso la
+				plataforma objetivo sea Windows, deberemos especificar también la opcion \texttt{OS=win32}.
+		\end{description}
+
+\section{Uso}
+	\section{C}
+
+\section{Implementación}
+
+	\subsection{Guía de estructuras}
+
+	\subsection{Guía de funciones}
+		\subsubsection{cabecera.h, etc, funcs abajo}
+
+\section{Extensión de la librería?}
+	\subsection{Como agregar nuevos pms?, etc}
+
+\section{Ejemplo}
+
+\section{Biblio???}
+
+\printindex
+
+\end{document}
