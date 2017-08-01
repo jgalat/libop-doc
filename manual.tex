@@ -8,6 +8,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage[none]{hyphenat}
 \usepackage{alltt}
+\usepackage{bold-extra}
 \author{}
 \title{LibOP \\ Documentación técnica}
 \makeindex
@@ -99,8 +100,26 @@
 		\end{description}
 
 \section{Uso}
-	\section{C}
-
+	\subsection{C/C++}
+		Las signaturas de las funciones exportadas por la librería se encuentran en las cabeceras
+		exportadas por la opción \texttt{export\_all}. Para hacer uso de la librería sólo deberemos incluír
+		en el código la cabecera \texttt{libop.h} ubicada en \texttt{include} y compilar de manera que se linkee
+		a la librería compilada. Ejemplo:
+		
+		\begin{alltt}
+			\textbf{CC} -I\textbf{include} -L\textbf{lib} ejemplo.c -lop
+		\end{alltt}
+		
+		Dónde \texttt{CC} es el compilador a utilizar (gcc, g++, etc.), \texttt{include} es la carpeta dónde
+		se encuentran las cabeceras y \texttt{lib} es la carpeta dónde se encuentra la librería compilada.
+		Notar el uso de la bandera \texttt{-lop}, la cual es necesaria.
+		
+	\subsection{C\#}
+		En el siguiente enlace: \url{https://www.github.com/jgalat/libop_CS}, se encuentra alojada
+		una solución hecha en Visual Studio la cual actúa como interfaz para invocar a las funciones
+		de la librería desde C\#. La solución requiere de la librería compilada utilizando la bandera
+		\texttt{OS=win32}, es decir \texttt{libop.dll}.
+		
 \section{Implementación}
 
 	\subsection{Guía de estructuras}
