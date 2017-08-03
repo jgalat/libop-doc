@@ -126,37 +126,133 @@
 		A continuacióin se describen las estructuras incluídas en la librería.
 		
 		\begin{description}
-		\item [\texttt{time\_period}] Representa un periodo de tiempo. A partir de la definicion de 
-			la cantidad de días activos que habrá en el año, se puede determinar el número
-			de días activos que el periodo abarca.  
-		\item [\texttt{dividend}] Representa un dividendo, el cual puede ser continuo o discreto.
-		\item [\texttt{volatility}] Representa una volatilidad.
-		\item [\texttt{risk\_free\_rate}] Representa una tasa libre de riesgo.
-		\item [\texttt{pm\_settings}] Estructura que almacena configuraciones que se pueden
-			especificar para ser usadas por un \texttt{pricing\_method}. Más adelante se describiran
-			sus campos, valores por defecto y como cambiarlos.
-		\item [\texttt{pricing\_method}] Estructura que contiene métodos para realizar el cálculo
-			de precios, griegas y volatilidades implícitas de opciones. Cada \texttt{pricing\_method}
-			se encuentra programado de forma exclusiva para un tipo de ejercicio en particular,
-			es decir, por ejemplo, no se podrá calcular el precio de una opción europea con un
+			\item [\texttt{time\_period}] Representa un periodo de tiempo. A partir de la definicion de 
+				la cantidad de días activos que habrá en el año, se puede determinar el número
+				de días activos que el periodo abarca.  
+			\item [\texttt{dividend}] Representa un dividendo, el cual puede ser continuo o discreto.
+			\item [\texttt{volatility}] Representa una volatilidad.
+			\item [\texttt{risk\_free\_rate}] Representa una tasa libre de riesgo.
+			\item [\texttt{pm\_settings}] Estructura que almacena configuraciones que se pueden
+				especificar para ser usadas por un \texttt{pricing\_method}. Más adelante se describiran
+				sus campos, valores por defecto y como cambiarlos.
+			\item [\texttt{pricing\_method}] Estructura que contiene métodos para realizar el cálculo
+				de precios, griegas y volatilidades implícitas de opciones. Cada \texttt{pricing\_method}
+				se encuentra programado de forma exclusiva para un tipo de ejercicio en particular,
+				es decir, por ejemplo, no se podrá calcular el precio de una opción europea con un
 			\texttt{pricing\_method} pensado para americanas. Para el cálculo hara uso de los datos
-			de la opción, dividendo, volatilidad, tasa de riesgo y (caso se haya especificado) un conjunto
-			de configuraciones diferentes a las por defecto.
-		\item [\texttt{result}]	Estrctura en la cual se almacenaran los resultados calculados por
-			un \texttt{pricing\_method}. Una vez realizado el cálculo por éste, se podrá consultar para
-			su obtención.
-		\item [\texttt{option}] Representa una opción, es decir, especifica su tipo (Call o Put), su
-			tipo de ejercicio (Europeo o Americano), su periodo hasta la expiración y su precio de
-			strike. Hace uso de \texttt{pricing\_method} para el cálculo de su precio, griegas y
-			volatilidades implicitas.
+				de la opción, dividendo, volatilidad, tasa de riesgo y (caso se haya especificado) un conjunto
+				de configuraciones diferentes a las por defecto.
+			\item [\texttt{result}]	Estrctura en la cual se almacenaran los resultados calculados por
+				un \texttt{pricing\_method}. Una vez realizado el cálculo por éste, se podrá consultar para
+				su obtención.
+			\item [\texttt{option}] Representa una opción, es decir, especifica su tipo (Call o Put), su
+				tipo de ejercicio (Europeo o Americano), su periodo hasta la expiración y su precio de
+				strike. Hace uso de \texttt{pricing\_method} para el cálculo de su precio, griegas y
+				volatilidades implicitas.
 		\end{description}
 
-	\subsection{Guía de funciones}
-		A continuación se detallan las funciones específicas de cada estructura
-		listadas según la cabecera en la que se encuentra.
+	\subsection{Guía de funciones y tipos}
+		A continuación se detallan las funciones y tipos definidos específicos de cada estructura
+		listados según la cabecera en la que se encuentran.
 		
-		\subsubsection{cabecera.h, etc, funcs abajo}
-
+		\subsubsection{dividend.h}
+			\begin{description}
+			
+				\item [\texttt{dividend\_type}]
+					Es el tipo enumerado de los dividendos. Sus elementos son
+					\texttt{DIV\_DISCRETE} y \texttt{DIV\_CONTINUOUS}.
+					
+				\item [\texttt{dividend}]
+					Tipo de la estructura dividendo.
+				
+				\item [\texttt{dividend new\_continuous\_dividend(double continuous\_dividend)}]
+					Crea una estructura del tipo dividendo. Su tipo será continuo.
+					Toma como parametro el dividendo continuo en decimal (ej.: 10\% = 0.1).
+					En caso de error retorna \texttt{NULL}
+					
+				\item [\texttt{dividend new\_discrete\_dividend()}]
+					Crea una estructura del tipo dividendo. Su tipo será discreto.
+					La estructura creada no posee dividendos, es decir, caso sea utilizado
+					actuará como un dividendo continuo 0. Más adelante se define como poblar
+					la estructura con fechas y pagos.
+					En caso de error retorna \texttt{NULL}.
+					
+				\item [\texttt{void delete\_dividend(dividend d)}]
+					Destruye y libera la memoria utilizada por un dividendo.
+					
+				\item [\texttt{dividend\_type div\_get\_type(dividend d)}]
+					Devuelve el tipo del dividendo dado como parámetro.
+					
+				\item [\texttt{double div\_cont\_get\_val(dividend d)}]
+					Devuelve el valor del dividendo continuo con el que se creo la estructura.
+					En caso de error (ej.: el dividendo es discreto o \texttt{NULL}) retorna -1.
+					
+				\item [\texttt{int div\_disc\_get\_n(dividend d)}]
+					Devuelve el número de pagos que hay almacenados en la estructura.
+					En caso de error (ej.: el dividendo es continuo o \texttt{NULL} retorna -1.
+					
+				\item [\texttt{date *div\_disc\_get\_dates(dividend d)}]
+					Devuelve el arreglo de fechas con pagos almacenados en la estructura.
+					Las fechas se encuentran en tipo \texttt{date} el cual será explicado
+					en la sección de \texttt{time\_period.h}. Pueden ser transformados a días
+					utilizando el \texttt{time\_period} original.
+					En caso de error (ej.: el dividendo es continuo o \texttt{NULL}) o si
+					la lista es vacía, retorna \texttt{NULL}.
+					
+				\item [\texttt{double *div\_disc\_get\_ammounts(dividend d)}]
+					Devuelve el arreglo de pagos almacenados en la estructura.
+					La posición de un pago se corresponde con la de la fecha en esa posición.
+					En caso de error (ej.: el dividendo es continuo o \texttt{NULL}) o si
+					la lista es vacía, retorna \texttt{NULL}.
+					
+				\item [int div\_disc\_set\_dates(dividend d, time\_period tp, int size, ...)]
+					Especifica el los días en los cuales habrá pagos. Los periodos son en días.
+					Esta es la versión de argumentos variables, el número de pagos debe ser especificado
+					en \texttt{size}. Se debe pasar el \texttt{time\_period} a utilizar. Los datos 
+					especificados reemplazan los existentes.
+					
+					Ejemplo: Para establecer 2 fechas, una dentro de 100 días y otra dentro de 200
+						se utilizaría
+						\begin{alltt}
+							div_disc_set_dates(d, tp, 2, 100, 200);
+						\end{alltt}
+					En caso de error retorna -1.
+					
+				\item [\texttt{int div\_disc\_set\_ammounts(dividend d, int size, ...)}]
+					Especifica los montos a pagar. La posición en que se ubique el monto, corresponderá
+					a la de la fecha. Esta es la versión de argumentos variables, el número de pagos debe ser
+					especificado en \texttt{size}. Los datos especificados reemplazan los existentes.
+					
+					Ejemplo: Para establecer un único pago de \$5 se utilizaría
+						\begin{alltt}
+							div_disc_set_ammounts(d, 1, 5);
+						\end{alltt}
+					En caso de error retorna -1.
+					
+				\item [\texttt{int div\_disc\_set\_dates\_(dividend d, time\_period tp, int size, int *days)}]
+					Versión de argumentos no variables de \texttt{div\_disc\_set\_dates(...)}.
+					Se especifica un arreglo de días.
+					Se comporta de la misma manera.
+									
+					Ejemplo: El siguiente código es equivalente al ejemplo dado en la función anterior.
+						\begin{alltt}
+							int days[2] = \{ 100, 200 \};
+							div\_disc\_set\_dates\_(d, tp, 2, days);
+						\end{alltt}				
+				
+				
+				\item [\texttt{int div\_disc\_set\_ammounts\_(dividend d, int size, double *ammounts)}]
+					Versión de argumentos no variables de \texttt{div\_disc\_set\_ammounts(...)}.
+					Se especifica un arreglo con montos.
+					Se comporta de la misma manera.	
+					
+					Ejemplo: El siguiente código es equivalente al ejemplo dado en la función anterior.
+						\begin{alltt}
+							double ammounts[1] = \{ 5 \};
+							div\_disc\_set\_ammounts\_(d, 1, ammounts);
+						\end{alltt}										
+			\end{description}
+			
 \section{Extensión de la librería?}
 	\subsection{Como agregar nuevos pms?, etc}
 
