@@ -123,7 +123,7 @@
 \section{Implementación}
 
 	\subsection{Guía de estructuras}
-		A continuacióin se describen las estructuras incluídas en la librería.
+		A continuación se describen las estructuras incluídas en la librería.
 		
 		\begin{description}
 			\item [\texttt{time\_period}] Representa un periodo de tiempo. A partir de la definicion de 
@@ -153,106 +153,334 @@
 
 	\subsection{Guía de funciones y tipos}
 		A continuación se detallan las funciones y tipos definidos específicos de cada estructura
-		listados según la cabecera en la que se encuentran.
+		listados según la cabecera en la que se encuentran. Las secciones se encuentran en orden alfabético.
 		
 		\subsubsection{dividend.h}
-			\begin{description}
+		
+			\subparagraph{\texttt{dividend\_type}}
+				Tipo enumerado de los dividendos. Sus elementos son
+				\texttt{DIV\_DISCRETE} y \texttt{DIV\_CONTINUOUS}.
 			
-				\item [\texttt{dividend\_type}]
-					Es el tipo enumerado de los dividendos. Sus elementos son
-					\texttt{DIV\_DISCRETE} y \texttt{DIV\_CONTINUOUS}.
-					
-				\item [\texttt{dividend}]
-					Tipo de la estructura dividendo.
+			\subparagraph{\texttt{dividend}}
+				Tipo de la estructura dividendo.
 				
-				\item [\texttt{dividend new\_continuous\_dividend(double continuous\_dividend)}]
-					Crea una estructura del tipo dividendo. Su tipo será continuo.
-					Toma como parametro el dividendo continuo en decimal (ej.: 10\% = 0.1).
-					En caso de error retorna \texttt{NULL}
+			\subparagraph{\texttt{dividend new\_continuous\_dividend(double continuous\_dividend)}}
+				Crea una estructura del tipo dividendo. Su tipo será continuo.
+				Toma como parametro el dividendo continuo en decimal (ej.: 10\% = 0.1).
 					
-				\item [\texttt{dividend new\_discrete\_dividend()}]
-					Crea una estructura del tipo dividendo. Su tipo será discreto.
-					La estructura creada no posee dividendos, es decir, caso sea utilizado
-					actuará como un dividendo continuo 0. Más adelante se define como poblar
-					la estructura con fechas y pagos.
-					En caso de error retorna \texttt{NULL}.
+				En caso de error retorna \texttt{NULL}
+				
+			\subparagraph{\texttt{dividend new\_discrete\_dividend()}}
+				Crea una estructura del tipo dividendo. Su tipo será discreto.
+				La estructura creada no posee dividendos, es decir, caso sea utilizado
+				actuará como un dividendo continuo 0. Más adelante se define como poblar
+				la estructura con fechas y pagos.
 					
-				\item [\texttt{void delete\_dividend(dividend d)}]
-					Destruye y libera la memoria utilizada por un dividendo.
+				En caso de error retorna \texttt{NULL}.
+				
+			\subparagraph{\texttt{void delete\_dividend(dividend d)}}
+				Libera la memoria utilizada por la estructura dividendo.
+				
+			\subparagraph{\texttt{dividend\_type div\_get\_type(dividend d)}}
+				Devuelve el tipo del dividendo dado como parámetro.
+				
+			\subparagraph{\texttt{double div\_cont\_get\_val(dividend d)}}
+				Devuelve el valor del dividendo continuo con el que se creo la estructura.
 					
-				\item [\texttt{dividend\_type div\_get\_type(dividend d)}]
-					Devuelve el tipo del dividendo dado como parámetro.
+				En caso de error (ej.: el dividendo es discreto o \texttt{NULL}) retorna -1.
+				
+			\subparagraph{\texttt{int div\_disc\_get\_n(dividend d)}}
+			
+				Devuelve el número de pagos que hay almacenados en la estructura.
 					
-				\item [\texttt{double div\_cont\_get\_val(dividend d)}]
-					Devuelve el valor del dividendo continuo con el que se creo la estructura.
-					En caso de error (ej.: el dividendo es discreto o \texttt{NULL}) retorna -1.
+				En caso de error (ej.: el dividendo es continuo o \texttt{NULL} retorna -1.
+				
+			\subparagraph{\texttt{date *div\_disc\_get\_dates(dividend d)}}
+				Devuelve el arreglo de fechas con pagos almacenados en la estructura.
+				Las fechas se encuentran en tipo \texttt{date} el cual será explicado
+				en la sección de \texttt{time\_period.h}. Pueden ser transformados a días
+				utilizando el \texttt{time\_period} original.
 					
-				\item [\texttt{int div\_disc\_get\_n(dividend d)}]
-					Devuelve el número de pagos que hay almacenados en la estructura.
-					En caso de error (ej.: el dividendo es continuo o \texttt{NULL} retorna -1.
+				En caso de error (ej.: el dividendo es continuo o \texttt{NULL}) o si
+				la lista es vacía, retorna \texttt{NULL}.
+				
+			\subparagraph{\texttt{double *div\_disc\_get\_ammounts(dividend d)}}
+				Devuelve el arreglo de pagos almacenados en la estructura.
+				La posición de un pago se corresponde con la de la fecha en esa posición.
 					
-				\item [\texttt{date *div\_disc\_get\_dates(dividend d)}]
-					Devuelve el arreglo de fechas con pagos almacenados en la estructura.
-					Las fechas se encuentran en tipo \texttt{date} el cual será explicado
-					en la sección de \texttt{time\_period.h}. Pueden ser transformados a días
-					utilizando el \texttt{time\_period} original.
-					En caso de error (ej.: el dividendo es continuo o \texttt{NULL}) o si
-					la lista es vacía, retorna \texttt{NULL}.
+				En caso de error (ej.: el dividendo es continuo o \texttt{NULL}) o si
+				la lista es vacía, retorna \texttt{NULL}.
+			
+			\subparagraph{int div\_disc\_set\_dates(dividend d, time\_period tp, int size, ...)}
+				Especifica el los días en los cuales habrá pagos. Los periodos son en días y requieren
+				de la estructura \texttt{time\_period} explicada más adelante.
+				Esta es la versión de argumentos variables, el número de pagos debe ser especificado
+				en \texttt{size}. Se debe pasar el \texttt{time\_period} a utilizar. Los datos 
+				especificados reemplazan los existentes.
 					
-				\item [\texttt{double *div\_disc\_get\_ammounts(dividend d)}]
-					Devuelve el arreglo de pagos almacenados en la estructura.
-					La posición de un pago se corresponde con la de la fecha en esa posición.
-					En caso de error (ej.: el dividendo es continuo o \texttt{NULL}) o si
-					la lista es vacía, retorna \texttt{NULL}.
+				Ejemplo: Para establecer 2 fechas, una dentro de 100 días y otra dentro de 200
+					se utilizaría
+					\begin{alltt}
+						div_disc_set_dates(d, tp, 2, 100, 200);
+					\end{alltt}
+						
+				En caso de error retorna -1.
 					
-				\item [int div\_disc\_set\_dates(dividend d, time\_period tp, int size, ...)]
-					Especifica el los días en los cuales habrá pagos. Los periodos son en días.
-					Esta es la versión de argumentos variables, el número de pagos debe ser especificado
-					en \texttt{size}. Se debe pasar el \texttt{time\_period} a utilizar. Los datos 
-					especificados reemplazan los existentes.
+			\subparagraph{\texttt{int div\_disc\_set\_ammounts(dividend d, int size, ...)}}
+				Especifica los montos a pagar. La posición en que se ubique el monto, corresponderá
+				a la de la fecha. Esta es la versión de argumentos variables, el número de pagos debe ser
+				especificado en \texttt{size}. Los datos especificados reemplazan los existentes.
 					
-					Ejemplo: Para establecer 2 fechas, una dentro de 100 días y otra dentro de 200
-						se utilizaría
-						\begin{alltt}
-							div_disc_set_dates(d, tp, 2, 100, 200);
-						\end{alltt}
+				Ejemplo: Para establecer un único pago de \$5 se utilizaría
+					\begin{alltt}
+						div_disc_set_ammounts(d, 1, 5);
+					\end{alltt}
+						
 					En caso de error retorna -1.
 					
-				\item [\texttt{int div\_disc\_set\_ammounts(dividend d, int size, ...)}]
-					Especifica los montos a pagar. La posición en que se ubique el monto, corresponderá
-					a la de la fecha. Esta es la versión de argumentos variables, el número de pagos debe ser
-					especificado en \texttt{size}. Los datos especificados reemplazan los existentes.
-					
-					Ejemplo: Para establecer un único pago de \$5 se utilizaría
-						\begin{alltt}
-							div_disc_set_ammounts(d, 1, 5);
-						\end{alltt}
-					En caso de error retorna -1.
-					
-				\item [\texttt{int div\_disc\_set\_dates\_(dividend d, time\_period tp, int size, int *days)}]
-					Versión de argumentos no variables de \texttt{div\_disc\_set\_dates(...)}.
-					Se especifica un arreglo de días.
-					Se comporta de la misma manera.
+			\subparagraph{\texttt{int div\_disc\_set\_dates\_(dividend d, time\_period tp, int size, int *days)}}
+				Versión de argumentos no variables de \texttt{div\_disc\_set\_dates(...)}.
+				Se especifica un arreglo de días.
+				Se comporta de la misma manera.
 									
-					Ejemplo: El siguiente código es equivalente al ejemplo dado en la función anterior.
-						\begin{alltt}
-							int days[2] = \{ 100, 200 \};
-							div\_disc\_set\_dates\_(d, tp, 2, days);
-						\end{alltt}				
-				
-				
-				\item [\texttt{int div\_disc\_set\_ammounts\_(dividend d, int size, double *ammounts)}]
-					Versión de argumentos no variables de \texttt{div\_disc\_set\_ammounts(...)}.
-					Se especifica un arreglo con montos.
-					Se comporta de la misma manera.	
-					
-					Ejemplo: El siguiente código es equivalente al ejemplo dado en la función anterior.
-						\begin{alltt}
-							double ammounts[1] = \{ 5 \};
-							div\_disc\_set\_ammounts\_(d, 1, ammounts);
-						\end{alltt}										
-			\end{description}
+				Ejemplo: El siguiente código es equivalente al ejemplo dado en la función anterior.
+					\begin{alltt}
+						int days[2] = \{ 100, 200 \};
+						div\_disc\_set\_dates\_(d, tp, 2, days);
+					\end{alltt}		
 			
+			\subparagraph{\texttt{int div\_disc\_set\_ammounts\_(dividend d, int size, double *ammounts)}}
+				Versión de argumentos no variables de \texttt{div\_disc\_set\_ammounts(...)}.
+				Se especifica un arreglo con montos.
+				Se comporta de la misma manera.	
+					
+				Ejemplo: El siguiente código es equivalente al ejemplo dado en la función anterior.
+					\begin{alltt}
+						double ammounts[1] = \{ 5 \};
+						div\_disc\_set\_ammounts\_(d, 1, ammounts);
+					\end{alltt}	
+			
+			
+		\subsubsection{libop.h}
+			No posee funciones declaradas. Su función es la de incluir al resto de las cabeceras
+			de manera que sólo se requiere su inclusión para poder utilzar las funciones de la librería.
+			
+		\subsubsection{option.h}
+
+			\subparagraph{\texttt{option}} 
+				Tipo de la estructura opción.
+									
+			\subparagraph{\texttt{option new\_option(option\_type t, exercise\_type e, time\_period tp, double strike)}}			
+				Crea una estructura del tipo opción. Se debe especificar \texttt{option\_type} y
+				\texttt{exercise\_type} (ambos descriptos en la siguiente sección), periodo hasta la madurez
+				(establecido en la estructura \texttt{time\_period}) y precio de strike.
+					
+				En caso de error retorna \texttt{NULL}.
+				
+			\subparagraph{\texttt{void delete\_option(option o)}}
+				Libera la memoria utilizada por la estructura opción.	
+					
+			\subparagraph{\texttt{int option\_set\_pricing\_method(option o, pricing\_method pm)}}
+				Especifica la estructura \texttt{pricing\_method} a utilizar por la opción para
+				los cálculos.
+					
+				En caso de error retorna -1.
+					
+			\subparagraph{\texttt{int option\_price(option o, double underlying, result r)}}
+				Calcula el precio de la opción para el subyacente dado en \texttt{underlying}.
+				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
+				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
+					
+				En caso de error retorna -1.
+					
+			\subparagraph{\texttt{int option\_delta(option o, double underlying, result r)}}
+				Calcula el delta de la opción para el subyacente dado en \texttt{underlying}.
+				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
+				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
+					
+				En caso de error retorna -1.
+
+			\subparagraph{\texttt{int option\_gamma(option o, double underlying, result r)}}
+				Calcula el gamma de la opción para el subyacente dado en \texttt{underlying}.
+				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
+				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
+					
+				En caso de error retorna -1.
+					
+			\subparagraph{\texttt{int option\_theta(option o, double underlying, result r)}}
+				Calcula el theta de la opción para el subyacente dado en \texttt{underlying}.
+				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
+				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
+					
+				En caso de error retorna -1.
+					
+			\subparagraph{\texttt{int option\_rho(option o, double underlying, result r)}}
+				Calcula el rho de la opción para el subyacente dado en \texttt{underlying}.
+				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
+				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
+					
+				En caso de error retorna -1.
+					
+			\subparagraph{\texttt{int option\_vega(option o, double underlying, result r)}}
+				Calcula el vega de la opción para el subyacente dado en \texttt{underlying}.
+				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
+				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
+					
+				En caso de error retorna -1.
+					
+			\subparagraph{\texttt{int option\_prices(option o, int size, double *underlyng, result r)}}
+				Calcula los precios de la opción para cada valor de subyacente en el arreglo dado en
+				\texttt{underlying}.
+				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
+				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
+					
+				En caso de error retorna -1.
+					
+			\subparagraph{\texttt{int option\_price\_precision(option o, double price, double underlying, result r)}}
+				Calcula la precisión del último precio retornado, especificado en \texttt{price}, para
+				el subyacente en \texttt{underlying}. Caso el precio utilizado sea otro, el comportamiento
+				no está establecido.
+				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
+				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
+					
+				En caso de error retorna -1.
+					
+			\subparagraph{\texttt{int option\_price\_and\_greeks(option o, double underlying, result r)}}
+				Equivalente a llamar a las funciones de cálculo de precio y griegas.
+					
+				En caso de error, es decir falle alguna, retorna -1.
+					
+			\subparagraph{\texttt{int option\_impl\_vol(option o, double price, double underlying, result r)}}
+				Calcula la volatilidad implicita para el precio de opción especificado en \texttt{price}, dado
+				el subyacente en \texttt{underlying}.
+				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
+				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
+					
+				En caso de error retorna -1.
+					
+
+		\subsubsection{option\_data.h}
+		
+			\subparagraph{\texttt{option\_type}}
+				Tipo enumerado de los tipos de opciones. Sus elementos son \texttt{OPTION\_CALL} (Call) y 
+				\texttt{OPTION\_PUT} (Put).
+				
+			\subparagraph{\texttt{exercise\_type}}
+				Tipo enumerado de los tipos de ejercicios. Sus elementos son
+				\texttt{EU\_EXERCISE} (ejercicio europeo) y \texttt{AM\_EXERCISE} (ejercicio americano).
+				
+		\subsubsection{pm\_settings.h}
+			
+			\subparagraph{\texttt{pm\_settings}}
+				Tipo de la estructura de configuraciones para \texttt{pricing\_method}.
+				Contiene campos con valores configurables para ser utilizados por los
+				métodos de \texttt{pricing\_method}	.
+		
+			\subparagraph{\texttt{pm\_settings new\_pm\_settings()}}
+				Crea una estructura del tipo \texttt{pm\_settings}. Contiene inicialmente
+				valores por defecto en los campos configurables.
+				
+				En caso de error retorna \texttt{NULL}
+				
+			\subparagraph{\texttt{void delete\_pm\_settings(pm\_settings pms)}}
+				Libera la memoria utilizada por la estructura \texttt{pm\_settings}.
+				
+			\subparagraph{\texttt{int pm\_settings\_set\_grid\_size(pm\_settings pms, int grid\_size)}}
+				Establece el tamaño de grilla. Utilizado por \texttt{pricing\_methods} que utilicen diferencias
+				finitas para los cálculos. Su valor por defecto es 100.
+				
+				En caso de error retorna -1.
+				
+			\subparagraph{\texttt{int pm\_settings\_set\_Smax(pm\_settings pms, double Smax)}}
+				Establece el valor de subyacente máximo hasta el cúal el método de diferencias finitas
+				con grilla uniforme creará la grilla. Su valor por defecto es -1, es decir, el método
+				elegirá la grilla adecuada.
+				
+				En caso de error retorna -1.
+				
+			\subparagraph{\texttt{int pm\_settings\_set\_tol(pm\_settings pms, double tol)}}
+				Establece la tolerancia a ser utilizada por el método de diferencias finitas.
+				Su valor por defecto es $10^{-9}$.			
+				
+				En caso de error retorna -1.
+			
+			\subparagraph{\texttt{int pm\_settings\_set\_abstol(pm\_settings pms, double abstol)}}
+				Establece la tolerancia absoluta a ser utilizada por el método de diferencias finitas.
+				Su valor por defecto es $10^{-12}$.
+				
+				En caso de error retorna -1.
+				
+			\subparagraph{\texttt{int pm\_settings\_set\_iv\_max\_it(pm\_settings pms, int max\_iterations)}}
+				Establece el número máximo de iteraciones a ser realizadas por el método de la secante
+				para el cálculo de la volatilidad implícita. Su valor por defecto es 5.
+				
+				En caso de error retorna -1.
+				
+			\subparagraph{\texttt{int pm\_settings\_set\_iv\_eps(pm\_settings pms, double epsilon)}}
+				Establece la cota de error aceptable a ser utilizado por el método de la secante 
+				para el cálculo de la volatilidad implícita. Su valor por defecto es $10^{-4}$.
+				
+				En caso de error retorna -1.
+				
+			\subparagraph{\texttt{int pm\_settings\_set\_iv\_init(pm\_settings pms, double guess\_vol0, double guess\_vol1)}}
+				Establece los valores iniciales a ser usados por el método de la secante para el cálculo
+				de la volatilidad implícita. Sus valores por defecto son 0.25 y 0.75.
+				
+				En caso de error retorna -1.
+				
+			\subparagraph{\texttt{int pm\_settings\_set\_extra\_data(pm\_settings pms, void *extra\_data)}}
+				Establece un dato extra el cual tal vez no fue cubierto por los campos descriptos anteriormente
+				para ser utilizado por el \texttt{pricing\_method}.
+				
+				En caso de error retorna -1.
+			
+			\subparagraph{Todas las funciones descritas anteriormente poseen su variante ``get''
+				 para la obtención del valor contenido en la estructura.}
+				
+		\subsubsection{pricing\_method.h}
+			
+			\subparagraph{\texttt{method\_id}}
+				Tipo enumerado de los métodos actualmente implementados en la librería.
+				Sus elementos son: 
+				\begin{itemize}
+					\item \texttt{EU\_ANALYTIC}, la cual utiliza fórmulas analíticas
+						para los cálculos. Únicamente para opciones cuyo tipo de ejercicio es europeo.
+					\item \texttt{AM\_FD\_UG}, la cual utiliza una grilla uniforme y métodos
+						de diferencias finitas para los cálculos. Únicamente para opciones 
+						cuyo tipo de ejercicio es americano.
+					\item \texttt{AM\_FD\_NUG}, la cual utiliza una grilla no uniforme y métodos
+						de diferencias finitas para los cálculos. Únicamente para opciones
+						cuyo tipo de ejercicio es americano.
+				\end{itemize}
+				
+			\subparagraph{\texttt{pricing\_method}}
+				Tipo de la estructura que contiene métodos para el cálculo de precio y griegas
+				de opciones.	
+				
+			\subparagraph{\texttt{pricing\_method new\_pricing\_method(method\_id id, volatility vol, risk\_free\_rate r, dividend d)}}
+				Crea una estructura del tipo \texttt{pricing\_method}. Se debe especificar el \texttt{method\_id},
+				la tasa libre de riesgo \texttt{risk\_free\_rate} y el dividendo \texttt{dividend}. La volatilidad
+				puede ser \texttt{NULL} caso se esté calculando la volatilidad implícita de la opción.
+				
+				En caso de error retorna \texttt{NULL}.
+				
+			\subparagraph{\texttt{void delete\_pricing\_method(pricing\_method pm)}}
+				Libera la memoria utilizada por la estructura \texttt{pricing\_method}.
+				
+			\subparagraph{\texttt{int pm\_set\_settings(pricing\_method pm, pm\_settings pms)}}
+				Establece la estuctura \texttt{pm\_settings} a ser utilizada por el \texttt{pricing\_method}.
+				Caso no se especificase, se utilizan valores establecidos por defecto.
+				
+				En caso de error retorna -1.
+												
+		\subsubsection{result.h}
+		
+		\subsubsection{risk\_free\_rate.h}
+		
+		\subsubsection{time\_period.h}
+		
+		\subsubsection{volatility.h}
+		
 \section{Extensión de la librería?}
 	\subsection{Como agregar nuevos pms?, etc}
 
