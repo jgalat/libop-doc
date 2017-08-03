@@ -123,8 +123,38 @@
 \section{Implementación}
 
 	\subsection{Guía de estructuras}
+		A continuacióin se describen las estructuras incluídas en la librería.
+		
+		\begin{description}
+		\item [\texttt{time\_period}] Representa un periodo de tiempo. A partir de la definicion de 
+			la cantidad de días activos que habrá en el año, se puede determinar el número
+			de días activos que el periodo abarca.  
+		\item [\texttt{dividend}] Representa un dividendo, el cual puede ser continuo o discreto.
+		\item [\texttt{volatility}] Representa una volatilidad.
+		\item [\texttt{risk\_free\_rate}] Representa una tasa libre de riesgo.
+		\item [\texttt{pm\_settings}] Estructura que almacena configuraciones que se pueden
+			especificar para ser usadas por un \texttt{pricing\_method}. Más adelante se describiran
+			sus campos, valores por defecto y como cambiarlos.
+		\item [\texttt{pricing\_method}] Estructura que contiene métodos para realizar el cálculo
+			de precios, griegas y volatilidades implícitas de opciones. Cada \texttt{pricing\_method}
+			se encuentra programado de forma exclusiva para un tipo de ejercicio en particular,
+			es decir, por ejemplo, no se podrá calcular el precio de una opción europea con un
+			\texttt{pricing\_method} pensado para americanas. Para el cálculo hara uso de los datos
+			de la opción, dividendo, volatilidad, tasa de riesgo y (caso se haya especificado) un conjunto
+			de configuraciones diferentes a las por defecto.
+		\item [\texttt{result}]	Estrctura en la cual se almacenaran los resultados calculados por
+			un \texttt{pricing\_method}. Una vez realizado el cálculo por éste, se podrá consultar para
+			su obtención.
+		\item [\texttt{option}] Representa una opción, es decir, especifica su tipo (Call o Put), su
+			tipo de ejercicio (Europeo o Americano), su periodo hasta la expiración y su precio de
+			strike. Hace uso de \texttt{pricing\_method} para el cálculo de su precio, griegas y
+			volatilidades implicitas.
+		\end{description}
 
 	\subsection{Guía de funciones}
+		A continuación se detallan las funciones específicas de cada estructura
+		listadas según la cabecera en la que se encuentra.
+		
 		\subsubsection{cabecera.h, etc, funcs abajo}
 
 \section{Extensión de la librería?}
