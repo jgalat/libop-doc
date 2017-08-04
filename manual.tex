@@ -474,9 +474,66 @@
 				En caso de error retorna -1.
 												
 		\subsubsection{result.h}
-		
+			\subparagraph{\texttt{result}}
+				Tipo de la estructura \texttt{result}.
+			
+			\subparagraph{\texttt{result new\_result()}}
+				Crea una estructura vacía del tipo \texttt{result}.
+				
+				En caso de error retorna \texttt{NULL}.
+				
+			\subparagraph{\texttt{void delete\_result(result r)}}
+				Libera la memoria utilizada por la estructura.
+				
+			\subparagraph{\texttt{double result\_get\_price(result r)}}
+				Devuelve el valor del precio contenido en la estructura.
+				Requiere que se haya utilizado la estructura al menos una vez 
+				con \texttt{option\_price(...)}. Caso contrario devolverá 0.
+				
+			\subparagraph{\texttt{double result\_get\_price\_precision(result r)}}
+				Devuelve la precisión del precio contenido en la estructura.
+				Requiere que se haya utilizado la estructura al menos una vez 
+				con \texttt{option\_price(...)} y \texttt{option\_price\_precision(...)}. 
+				Caso contrario devolverá 0.	
+				
+			\subparagraph{\texttt{double result\_get\_prices(result r)}}
+				Devuelve el arreglo de precios contenido en la estructura.
+				Requiere que se haya utilizado la estructura al menos una vez 
+				con \texttt{option\_prices(...)}. Caso contrario devolverá
+				\texttt{NULL}.
+				
+			\subparagraph{\texttt{double result\_get\_delta(result r)}}
+				Devuelve el valor del delta contenido en la estructura.
+				Requiere que se haya utilizado la estructura al menos una vez 
+				con \texttt{option\_delta(...)}. Caso contrario devolverá 0.
+				
+			\subparagraph{\texttt{double result\_get\_gamma(result r)}}
+				Devuelve el valor del gamma contenido en la estructura.
+				Requiere que se haya utilizado la estructura al menos una vez 
+				con \texttt{option\_gamma(...)}. Caso contrario devolverá 0.
+				
+			\subparagraph{\texttt{double result\_get\_theta(result r)}}
+				Devuelve el valor del theta contenido en la estructura.
+				Requiere que se haya utilizado la estructura al menos una vez 
+				con \texttt{option\_theta(...)}. Caso contrario devolverá 0.
+				
+			\subparagraph{\texttt{double result\_get\_rho(result r)}}
+				Devuelve el valor del rho contenido en la estructura.
+				Requiere que se haya utilizado la estructura al menos una vez 
+				con \texttt{option\_rho(...)}. Caso contrario devolverá 0.
+				
+			\subparagraph{\texttt{double result\_get\_vega(result r)}}
+				Devuelve el valor del vega contenido en la estructura.
+				Requiere que se haya utilizado la estructura al menos una vez 
+				con \texttt{option\_vega(...)}. Caso contrario devolverá 0.
+				
+			\subparagraph{\texttt{double result\_get\_impl\_vol(result r)}}
+				Devuelve el valor de la volatilidad implícita contenido en la estructura.
+				Requiere que se haya utilizado la estructura al menos una vez 
+				con \texttt{option\_impl\_vol(...)}. Caso contrario devolverá 0.
+				
 		\subsubsection{risk\_free\_rate.h}
-		
+			
 		\subsubsection{time\_period.h}
 		
 		\subsubsection{volatility.h}
