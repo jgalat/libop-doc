@@ -10,7 +10,7 @@
 \usepackage{alltt}
 \usepackage{bold-extra}
 \author{}
-\title{LibOP \\ Documentación técnica}
+\title{LibOp \\ Documentación técnica}
 \makeindex
 \date{}
 
@@ -25,8 +25,10 @@
 
 
 \subsection{Descripción}
-	%TODO que hace, en que está hecha? etc..
+	\subparagraph{LibOp} es una librería escrita en C/C++ para el cálculo de 
+	precios, griegas y volatilidades implícitas de opciones europeas y americanas.
 	
+	La misma se puede encontrar en \newline{} \url{https://www.github.com/jgalat/op\_proto}.
 	
 \section{Compilación}
 	En subsecciones siguientes se listan los requerimientos a cumplir y las instrucciones
@@ -162,7 +164,7 @@
 				\texttt{DIV\_DISCRETE} y \texttt{DIV\_CONTINUOUS}.
 			
 			\subparagraph{\texttt{dividend}}
-				Tipo de la estructura dividendo.
+				Tipo de la estructura que representa un dividendo.
 				
 			\subparagraph{\texttt{dividend new\_continuous\_dividend(double continuous\_dividend)}}
 				Crea una estructura del tipo dividendo. Su tipo será continuo.
@@ -268,7 +270,7 @@
 		\subsubsection{option.h}
 
 			\subparagraph{\texttt{option}} 
-				Tipo de la estructura opción.
+				Tipo de la estructura que representa una opción.
 									
 			\subparagraph{\texttt{option new\_option(option\_type t, exercise\_type e, time\_period tp, double strike)}}			
 				Crea una estructura del tipo opción. Se debe especificar \texttt{option\_type} y
@@ -475,7 +477,7 @@
 												
 		\subsubsection{result.h}
 			\subparagraph{\texttt{result}}
-				Tipo de la estructura \texttt{result}.
+				Tipo de la estructura donde se guardan resultados.
 			
 			\subparagraph{\texttt{result new\_result()}}
 				Crea una estructura vacía del tipo \texttt{result}.
@@ -534,17 +536,113 @@
 				
 		\subsubsection{risk\_free\_rate.h}
 			
+			\subparagraph{\texttt{risk\_free\_rate}}
+				Tipo de la estructura que representa una tasa libre de riesgo.
+				
+			\subparagraph{\texttt{risk\_free\_rate new\_risk\_free\_rate(double val)}}
+				Crea una estructura del tipo \texttt{risk\_free\_rate}. Toma como argumento
+				la tasa en decimal (ej.: 10\% = 0.1).
+				
+				En caso de error retorna \texttt{NULL}.
+				
+			\subparagraph{\texttt{void delete\_risk\_free\_rate(risk\_free\_rate rfr)}}
+				Libera la memoria utilizada por la estructura.
+				
+			\subparagraph{\texttt{int rfr\_set\_value(risk\_free\_rate rfr, double val)}}
+				Actualiza el valor de la tasa libre de riesgo almacenado en la estructura.
+				
+				En caso de error retorna -1.
+				
+			\subparagraph{\texttt{double rfr\_get\_value(risk\_free\_rate rfr)}}
+				Devuelve el valor de la tasa libre de riesgo almacenado en la estructura.
+				
 		\subsubsection{time\_period.h}
-		
+			
+			\subparagraph{\texttt{date}}
+				Tipo que representa un momento en un periodo de tiempo.
+				
+			\subparagraph{\texttt{time\_period}}
+				Tipo de la estructura que representa un periodo de tiempo. La estructura
+				también contiene el número de días activos en el año.
+				
+			\subparagraph{\texttt{time\_period new\_time\_period(int days\_per\_year)}}
+				Crea una estructura del tipo \texttt{time\_period}. Toma como argumento
+				el número de días activos en el año. El periodo inicialmente se encuentra vacío.
+				
+				En caso de error retorna \texttt{NULL}.
+				
+			\subparagraph{\texttt{time\_period new\_time\_period\_365d()}}
+				Equivalente a \texttt{new\_time\_period(365)}.
+				
+			\subparagraph{\texttt{time\_period new\_time\_period\_252d()}}
+				Equivalente a \texttt{new\_time\_period(252)}.
+				
+			\subparagraph{\texttt{void delete\_time\_period(time\_period tp)}}
+				Libera la memoria utilizada por la estructura.
+				
+			\subparagraph{\texttt{int tp\_set\_days(time\_period tp, int days)}}
+				Actualiza el valor del periodo de tiempo para abarcar el número de días
+				especificado en \texttt{days}.
+				
+				En caso de error retorna -1.
+				
+			\subparagraph{\texttt{DAYS(time\_period tp, int days}}
+				Macro que equivale a \texttt{tp\_set\_days(tp, days)} para luego devolver
+				la estructura.
+				
+			\subparagraph{\texttt{int tp\_set\_years(time\_period tp, int years)}}
+				Actualiza el valor del periodo de tiempo para abarcar el número de años
+				especificado en \texttt{years}. Equivalente a 
+				\texttt{tp\_set\_days(tp, n * days\_per\_year)}, donde \texttt{n}
+				es el número de años y \texttt{days\_per\_year} es el número de días
+				activos que utilizamos al momento de crear la estructura.
+				
+				En caso de error retorna -1.
+				
+			\subparagraph{\texttt{YEARS(time\_period tp, int years}}
+				Macro que equivale a \texttt{tp\_set\_years(tp, years)} para luego devolver
+				la estructura.
+				
+			\subparagraph{\texttt{date tp\_get\_date(time\_period tp)}}
+				Retorna el momento final en el periodo de tiempo.
+				
+			\subparagraph{\texttt{double tp\_get\_period(time\_period tp)}}
+				Retorna el valor que representaría un único día activo.
+			
+			\subparagraph{\texttt{date tp\_int\_to\_date(time\_period tp, int days)}}
+				Transforma un número de días al formato \texttt{date}.
+				
+			\subparagraph{\texttt{int tp\_date\_to\_int(time\_period tp, date date)}}
+				Transforma un momento en un periodo de tiempo al equivalente en número de días.
+			
 		\subsubsection{volatility.h}
-		
-\section{Extensión de la librería?}
-	\subsection{Como agregar nuevos pms?, etc}
 
-\section{Ejemplo}
+			\subparagraph{\texttt{volatility}}
+				Tipo de la estructura que representa una volatilidad.
+				
+			\subparagraph{\texttt{volatility new\_volatility(double val)}}
+				Crea una estructura del tipo \texttt{volatility}. Toma como argumento
+				el valor de la volatilidad en decimal (ej.: 10\% = 0.1).
+				
+				En caso de error retorna \texttt{NULL}.
+				
+			\subparagraph{\texttt{void delete\_volatility(volatility vol)}}
+				Libera la memoria utilizada por la estructura.
+				
+			\subparagraph{\texttt{int vol\_set\_value(volatility vol, double val)}}
+				Actualiza el valor de la volatilidad almacenado en la estructura.
+				
+				En caso de error retorna -1.
+				
+			\subparagraph{\texttt{double vol\_get\_value(volatility vol)}}
+				Devuelve el valor de la volatilidad almacenado en la estructura.			
+			
+\section{Extensión de la librería}
+	\subsection{Estructura de la librería}
+	\subsection{Como agregar un nuevo \texttt{pricing\_method}}
 
-\section{Biblio???}
-
+\section{Ejemplos}
+	
 \printindex
 
 \end{document}
