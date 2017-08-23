@@ -639,8 +639,38 @@
 			
 \section{Extensión de la librería}
 	\subsection{Estructura de la librería}
+		
 	\subsection{Como agregar un nuevo \texttt{pricing\_method}}
-
+		Dentro de la cabecera \texttt{pricing\_method\_internal.h} se encuentra 
+		la función \texttt{new\_pricing\_method\_(...)} la cual es utilizada
+		para la creación de una nueva estructura del tipo \texttt{pricing\_method}.
+		Esta función no es accesible a través de la interfaz de la librería, y es utilizada 
+		por los métodos internos ya programados para crear la estructura que si lo es.
+		
+		La función acepta como argumentos los métodos encargados de realizar los cálculos
+		necesarios para la obtención de precios, griegas y volatilidades implícitas, también recibe un dato
+		extra que puede ser necesario por los métodos durante los cálculos más una función para liberar
+		la memoria utilizada por éste, y por último valor de volatilidad, tasa libre de riesgo y dividendo
+		empaquetados en una estructura descripta en \texttt{pricing\_data.h}. Los tipos de las funciones
+		utilizadas para los cálculos se pueden encontrar en \texttt{common.h}.
+				
+		Como ejemplo se puede ver la implementación del \texttt{pricing\_method} para opciones europeas,
+		en \texttt{pricing\_methods/european/european\_analytic.c}. Cada método encargado de algún cálculo
+		se programa de forma estática, es decir, no es accesible fuera de este archivo. La única
+		función exportada es \texttt{new\_european\_analytic(...)}, como podemos ver en su cabecera.
+		Su único trabajo es invocar a \texttt{new\_pricing\_method\_(...)} con las funciones estáticas
+		devolviendo así una estructura \texttt{pricing\_method} la cual puede ser utilizada por el usuario final.
+		
+		Sólo resta añadir una forma de que el usuario la llame, de ello se encarga \texttt{new\_pricing\_method(...)},
+		en \texttt{pricing\_method.c}. Ésta última realiza la invocación dependiendo del identificador del método
+		entregado como parámetro. Siguiendo el ejemplo, para agregar el constructor del \texttt{pricing\_method} de
+		opciones europeas, se debe incluír su cabecera en \texttt{pricing\_method\_internal.h}, luego
+		añadir un identificador al tipo enumerado \texttt{method\_id} en \texttt{pricing\_method.h} (en este caso,
+		es \texttt{EU\_ANALYTIC}) y por último modificar \texttt{new\_pricing\_method(...)} 
+		en \texttt{pricing\_method.c} para caso sea ese el identificador entregado como parametro se invoque a
+		la función constructora correspondiente del nuevo \texttt{pricing\_method} (en el ejemplo, 
+		\texttt{new\_european\_analytic(...)}). 
+		
 \section{Ejemplos}
 	En la carpeta \texttt{examples} en la raíz del proyecto se pueden encontrar diferentes ejemplos
 	de uso de la librería. Cada ejemplo viene acompañado de comentarios que explican las características
