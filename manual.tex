@@ -25,31 +25,31 @@
 
 
 \subsection{Descripción}
-	\subparagraph{LibOp} es una librería escrita en C/C++ para el cálculo de 
+	\subparagraph{LibOp} es una librería escrita en C/C++ para el cálculo de
 	precios, griegas y volatilidades implícitas de opciones europeas y americanas.
-	
+
 	La misma se puede encontrar en \newline{} \url{https://www.github.com/jgalat/op\_proto}.
-	
+
 \section{Compilación}
 	En subsecciones siguientes se listan los requerimientos a cumplir y las instrucciones
 	a correr necesarias para la correcta compilación de la librería en sistemas basados
-	en Linux y en Windows. 	 
-	
+	en Linux y en Windows.
+
 	\subsection{Linux}
-		
+
 		\subsubsection{Requerimientos}
-			En sistemas derivados de Debian el único requerimiento es el conjunto de 
+			En sistemas derivados de Debian el único requerimiento es el conjunto de
 			herramientas que vienen incluídas en el paquete \texttt{build-essential},
 			el cual puede ser instalado desde los repositorios
 			oficiales utilizando el comando:
-			
+
 			\begin{alltt}
 				sudo apt-get install build-essential
-			\end{alltt}	
-			
+			\end{alltt}
+
 		\subsubsection{Instrucciones}
 			Ubicado en la carpeta del proyecto clonado podremos compilar la librería corriendo:
-			
+
 			\begin{alltt}
 				cd build && make
 			\end{alltt}
@@ -67,7 +67,7 @@
 			\end{itemize}
 		\subsubsection{Instrucciones}
 			Seguir las siguientes instrucciones.
-			
+
 			\begin{enumerate}
 				\item Instalar Git for Windows (opcional).
 				\item Instalar GNU Make.
@@ -79,24 +79,24 @@
 						\item Añadir la carpeta \texttt{mingw-w64/x86\_64-7.1.0-posix-seh-rt\_05-rev0/mingw64/bin} a la variable de entorno \texttt{PATH}.
 					\end{itemize}
 				\item Clonar el proyecto mediante Git.
-				\item Ubicado en la carpeta del proyecto correr: 
+				\item Ubicado en la carpeta del proyecto correr:
 						\begin{alltt}
 							cd build \&\& make OS=win32
-						\end{alltt}			
+						\end{alltt}
 			\end{enumerate}
-		
+
 			Finalizado todo obtendremos la librería compartida \texttt{libop.dll}.
-			
+
 	\subsection{Opciones de compilación}
 		Se listan a continuación opciones que se pueden pasar al comando \texttt{make}.
-		
+
 		\begin{description}
 			\item [\texttt{make OS=\textbf{os}}] Especifica el sistema para el cual se desea compilar la librería.
 				Sus opciones son \texttt{unix} o \texttt{win32}. Siendo \texttt{unix} la opción por defecto.
-			\item [\texttt{make VERBOSE=bool}] Caso sea \texttt{True} la librería compilada incluirá código 
+			\item [\texttt{make VERBOSE=bool}] Caso sea \texttt{True} la librería compilada incluirá código
 				necesario para la impresión de mensajes de error a través de la salida estandar de errores. Ésto
 				puede ser útil para la búsqueda de errores. Su opción por defecto es \texttt{False}.
-			\item [\texttt{make export\_all}] Creará una carpeta \texttt{export} en la raíz del proyecto la 
+			\item [\texttt{make export\_all}] Creará una carpeta \texttt{export} en la raíz del proyecto la
 				cual incluirá la librería compilada y las cabeceras C a ser incluídas para su uso. Caso la
 				plataforma objetivo sea Windows, deberemos especificar también la opcion \texttt{OS=win32}.
 		\end{description}
@@ -107,30 +107,30 @@
 		exportadas por la opción \texttt{export\_all}. Para hacer uso de la librería sólo deberemos incluír
 		en el código la cabecera \texttt{libop.h} ubicada en \texttt{include} y compilar de manera que se linkee
 		a la librería compilada. Ejemplo:
-		
+
 		\begin{alltt}
 			\textbf{CC} -I\textbf{include} -L\textbf{lib} ejemplo.c -lop
 		\end{alltt}
-		
+
 		Dónde \texttt{CC} es el compilador a utilizar (gcc, g++, etc.), \texttt{include} es la carpeta dónde
 		se encuentran las cabeceras y \texttt{lib} es la carpeta dónde se encuentra la librería compilada.
 		Notar el uso de la bandera \texttt{-lop}, la cual es necesaria.
-		
+
 	\subsection{C\#}
 		En el siguiente enlace: \url{https://www.github.com/jgalat/libop_CS}, se encuentra alojada
 		una solución hecha en Visual Studio la cual actúa como interfaz para invocar a las funciones
 		de la librería desde C\#. La solución requiere de la librería compilada utilizando la bandera
 		\texttt{OS=win32}, es decir \texttt{libop.dll}.
-		
+
 \section{Implementación}
 
 	\subsection{Guía de estructuras}
 		A continuación se describen las estructuras incluídas en la librería.
-		
+
 		\begin{description}
-			\item [\texttt{time\_period}] Representa un periodo de tiempo. A partir de la definicion de 
+			\item [\texttt{time\_period}] Representa un periodo de tiempo. A partir de la definicion de
 				la cantidad de días activos que habrá en el año, se puede determinar el número
-				de días activos que el periodo abarca.  
+				de días activos que el periodo abarca.
 			\item [\texttt{dividend}] Representa un dividendo, el cual puede ser continuo o discreto.
 			\item [\texttt{volatility}] Representa una volatilidad.
 			\item [\texttt{risk\_free\_rate}] Representa una tasa libre de riesgo.
@@ -156,525 +156,525 @@
 	\subsection{Guía de funciones y tipos}
 		A continuación se detallan las funciones y tipos definidos específicos de cada estructura
 		listados según la cabecera en la que se encuentran. Las secciones se encuentran en orden alfabético.
-		
+
 		\subsubsection{dividend.h}
-		
+
 			\subparagraph{\texttt{dividend\_type}}
 				Tipo enumerado de los dividendos. Sus elementos son
 				\texttt{DIV\_DISCRETE} y \texttt{DIV\_CONTINUOUS}.
-			
+
 			\subparagraph{\texttt{dividend}}
 				Tipo de la estructura que representa un dividendo.
-				
+
 			\subparagraph{\texttt{dividend new\_continuous\_dividend(double continuous\_dividend)}}
 				Crea una estructura del tipo dividendo. Su tipo será continuo.
 				Toma como parametro el dividendo continuo en decimal (ej.: 10\% = 0.1).
-					
+
 				En caso de error retorna \texttt{NULL}
-				
+
 			\subparagraph{\texttt{dividend new\_discrete\_dividend()}}
 				Crea una estructura del tipo dividendo. Su tipo será discreto.
 				La estructura creada no posee dividendos, es decir, caso sea utilizado
 				actuará como un dividendo continuo 0. Más adelante se define como poblar
 				la estructura con fechas y pagos.
-					
+
 				En caso de error retorna \texttt{NULL}.
-				
+
 			\subparagraph{\texttt{void delete\_dividend(dividend d)}}
 				Libera la memoria utilizada por la estructura dividendo.
-				
+
 			\subparagraph{\texttt{dividend\_type div\_get\_type(dividend d)}}
 				Devuelve el tipo del dividendo dado como parámetro.
-				
+
 			\subparagraph{\texttt{double div\_cont\_get\_val(dividend d)}}
 				Devuelve el valor del dividendo continuo con el que se creo la estructura.
-					
+
 				En caso de error (ej.: el dividendo es discreto o \texttt{NULL}) retorna -1.
-				
+
 			\subparagraph{\texttt{int div\_disc\_get\_n(dividend d)}}
-			
+
 				Devuelve el número de pagos que hay almacenados en la estructura.
-					
+
 				En caso de error (ej.: el dividendo es continuo o \texttt{NULL} retorna -1.
-				
+
 			\subparagraph{\texttt{date *div\_disc\_get\_dates(dividend d)}}
 				Devuelve el arreglo de fechas con pagos almacenados en la estructura.
 				Las fechas se encuentran en tipo \texttt{date} el cual será explicado
 				en la sección de \texttt{time\_period.h}. Pueden ser transformados a días
 				utilizando el \texttt{time\_period} original.
-					
+
 				En caso de error (ej.: el dividendo es continuo o \texttt{NULL}) o si
 				la lista es vacía, retorna \texttt{NULL}.
-				
-			\subparagraph{\texttt{double *div\_disc\_get\_ammounts(dividend d)}}
+
+			\subparagraph{\texttt{double *div\_disc\_get\_amounts(dividend d)}}
 				Devuelve el arreglo de pagos almacenados en la estructura.
 				La posición de un pago se corresponde con la de la fecha en esa posición.
-					
+
 				En caso de error (ej.: el dividendo es continuo o \texttt{NULL}) o si
 				la lista es vacía, retorna \texttt{NULL}.
-			
+
 			\subparagraph{int div\_disc\_set\_dates(dividend d, time\_period tp, int size, ...)}
 				Especifica el los días en los cuales habrá pagos. Los periodos son en días y requieren
 				de la estructura \texttt{time\_period} explicada más adelante.
 				Esta es la versión de argumentos variables, el número de pagos debe ser especificado
-				en \texttt{size}. Se debe pasar el \texttt{time\_period} a utilizar. Los datos 
+				en \texttt{size}. Se debe pasar el \texttt{time\_period} a utilizar. Los datos
 				especificados reemplazan los existentes.
-					
+
 				Ejemplo: Para establecer 2 fechas, una dentro de 100 días y otra dentro de 200
 					se utilizaría
 					\begin{alltt}
 						div_disc_set_dates(d, tp, 2, 100, 200);
 					\end{alltt}
-						
+
 				En caso de error retorna -1.
-					
-			\subparagraph{\texttt{int div\_disc\_set\_ammounts(dividend d, int size, ...)}}
+
+			\subparagraph{\texttt{int div\_disc\_set\_amounts(dividend d, int size, ...)}}
 				Especifica los montos a pagar. La posición en que se ubique el monto, corresponderá
 				a la de la fecha. Esta es la versión de argumentos variables, el número de pagos debe ser
 				especificado en \texttt{size}. Los datos especificados reemplazan los existentes.
-					
+
 				Ejemplo: Para establecer un único pago de \$5 se utilizaría
 					\begin{alltt}
-						div_disc_set_ammounts(d, 1, 5);
+						div_disc_set_amounts(d, 1, 5);
 					\end{alltt}
-						
+
 					En caso de error retorna -1.
-					
+
 			\subparagraph{\texttt{int div\_disc\_set\_dates\_(dividend d, time\_period tp, int size, int *days)}}
 				Versión de argumentos no variables de \texttt{div\_disc\_set\_dates(...)}.
 				Se especifica un arreglo de días.
 				Se comporta de la misma manera.
-									
+
 				Ejemplo: El siguiente código es equivalente al ejemplo dado en la función anterior.
 					\begin{alltt}
 						int days[2] = \{ 100, 200 \};
 						div\_disc\_set\_dates\_(d, tp, 2, days);
-					\end{alltt}		
-			
-			\subparagraph{\texttt{int div\_disc\_set\_ammounts\_(dividend d, int size, double *ammounts)}}
-				Versión de argumentos no variables de \texttt{div\_disc\_set\_ammounts(...)}.
+					\end{alltt}
+
+			\subparagraph{\texttt{int div\_disc\_set\_amounts\_(dividend d, int size, double *amounts)}}
+				Versión de argumentos no variables de \texttt{div\_disc\_set\_amounts(...)}.
 				Se especifica un arreglo con montos.
-				Se comporta de la misma manera.	
-					
+				Se comporta de la misma manera.
+
 				Ejemplo: El siguiente código es equivalente al ejemplo dado en la función anterior.
 					\begin{alltt}
-						double ammounts[1] = \{ 5 \};
-						div\_disc\_set\_ammounts\_(d, 1, ammounts);
-					\end{alltt}	
-			
-			
+						double amounts[1] = \{ 5 \};
+						div\_disc\_set\_amounts\_(d, 1, amounts);
+					\end{alltt}
+
+
 		\subsubsection{libop.h}
 			No posee funciones declaradas. Su función es la de incluir al resto de las cabeceras
 			de manera que sólo se requiere su inclusión para poder utilzar las funciones de la librería.
-			
+
 		\subsubsection{option.h}
 
-			\subparagraph{\texttt{option}} 
+			\subparagraph{\texttt{option}}
 				Tipo de la estructura que representa una opción.
-									
-			\subparagraph{\texttt{option new\_option(option\_type t, exercise\_type e, time\_period tp, double strike)}}			
+
+			\subparagraph{\texttt{option new\_option(option\_type t, exercise\_type e, time\_period tp, double strike)}}
 				Crea una estructura del tipo opción. Se debe especificar \texttt{option\_type} y
 				\texttt{exercise\_type} (ambos descriptos en la siguiente sección), periodo hasta la madurez
 				(establecido en la estructura \texttt{time\_period}) y precio de strike.
-					
+
 				En caso de error retorna \texttt{NULL}.
-				
+
 			\subparagraph{\texttt{void delete\_option(option o)}}
-				Libera la memoria utilizada por la estructura opción.	
-					
+				Libera la memoria utilizada por la estructura opción.
+
 			\subparagraph{\texttt{int option\_set\_pricing\_method(option o, pricing\_method pm)}}
 				Especifica la estructura \texttt{pricing\_method} a utilizar por la opción para
 				los cálculos.
-					
+
 				En caso de error retorna -1.
-					
+
 			\subparagraph{\texttt{int option\_price(option o, double underlying, result r)}}
 				Calcula el precio de la opción para el subyacente dado en \texttt{underlying}.
 				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
 				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
-					
+
 				En caso de error retorna -1.
-					
+
 			\subparagraph{\texttt{int option\_delta(option o, double underlying, result r)}}
 				Calcula el delta de la opción para el subyacente dado en \texttt{underlying}.
 				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
 				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
-					
+
 				En caso de error retorna -1.
 
 			\subparagraph{\texttt{int option\_gamma(option o, double underlying, result r)}}
 				Calcula el gamma de la opción para el subyacente dado en \texttt{underlying}.
 				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
 				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
-					
+
 				En caso de error retorna -1.
-					
+
 			\subparagraph{\texttt{int option\_theta(option o, double underlying, result r)}}
 				Calcula el theta de la opción para el subyacente dado en \texttt{underlying}.
 				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
 				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
-					
+
 				En caso de error retorna -1.
-					
+
 			\subparagraph{\texttt{int option\_rho(option o, double underlying, result r)}}
 				Calcula el rho de la opción para el subyacente dado en \texttt{underlying}.
 				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
 				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
-					
+
 				En caso de error retorna -1.
-					
+
 			\subparagraph{\texttt{int option\_vega(option o, double underlying, result r)}}
 				Calcula el vega de la opción para el subyacente dado en \texttt{underlying}.
 				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
 				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
-					
+
 				En caso de error retorna -1.
-					
+
 			\subparagraph{\texttt{int option\_prices(option o, int size, double *underlyng, result r)}}
 				Calcula los precios de la opción para cada valor de subyacente en el arreglo dado en
 				\texttt{underlying}.
 				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
 				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
-					
+
 				En caso de error retorna -1.
-					
+
 			\subparagraph{\texttt{int option\_price\_precision(option o, double price, double underlying, result r)}}
 				Calcula la precisión del último precio retornado, especificado en \texttt{price}, para
 				el subyacente en \texttt{underlying}. Caso el precio utilizado sea otro, el comportamiento
 				no está establecido.
 				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
 				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
-					
+
 				En caso de error retorna -1.
-					
+
 			\subparagraph{\texttt{int option\_price\_and\_greeks(option o, double underlying, result r)}}
 				Equivalente a llamar a las funciones de cálculo de precio y griegas.
-					
+
 				En caso de error, es decir falle alguna, retorna -1.
-					
+
 			\subparagraph{\texttt{int option\_impl\_vol(option o, double price, double underlying, result r)}}
 				Calcula la volatilidad implicita para el precio de opción especificado en \texttt{price}, dado
 				el subyacente en \texttt{underlying}.
 				Requiere de que se haya especificado el \texttt{pricing\_method} a ser utilzado.
 				El resultado es almacenado en la estructura \texttt{result} descripta más adelante.
-					
+
 				En caso de error retorna -1.
-					
+
 
 		\subsubsection{option\_data.h}
-		
+
 			\subparagraph{\texttt{option\_type}}
-				Tipo enumerado de los tipos de opciones. Sus elementos son \texttt{OPTION\_CALL} (Call) y 
+				Tipo enumerado de los tipos de opciones. Sus elementos son \texttt{OPTION\_CALL} (Call) y
 				\texttt{OPTION\_PUT} (Put).
-				
+
 			\subparagraph{\texttt{exercise\_type}}
 				Tipo enumerado de los tipos de ejercicios. Sus elementos son
 				\texttt{EU\_EXERCISE} (ejercicio europeo) y \texttt{AM\_EXERCISE} (ejercicio americano).
-				
+
 		\subsubsection{pm\_settings.h}
-			
+
 			\subparagraph{\texttt{pm\_settings}}
 				Tipo de la estructura de configuraciones para \texttt{pricing\_method}.
 				Contiene campos con valores configurables para ser utilizados por los
 				métodos de \texttt{pricing\_method}.
-		
+
 			\subparagraph{\texttt{pm\_settings new\_pm\_settings()}}
 				Crea una estructura del tipo \texttt{pm\_settings}. Contiene inicialmente
 				valores por defecto en los campos configurables.
-				
+
 				En caso de error retorna \texttt{NULL}
-				
+
 			\subparagraph{\texttt{void delete\_pm\_settings(pm\_settings pms)}}
 				Libera la memoria utilizada por la estructura \texttt{pm\_settings}.
-				
+
 			\subparagraph{\texttt{int pm\_settings\_set\_grid\_size(pm\_settings pms, int grid\_size)}}
 				Establece el tamaño de grilla. Utilizado por \texttt{pricing\_methods} que utilicen diferencias
 				finitas para los cálculos. Su valor por defecto es 100.
-				
+
 				En caso de error retorna -1.
-				
+
 			\subparagraph{\texttt{int pm\_settings\_set\_Smax(pm\_settings pms, double Smax)}}
 				Establece el valor de subyacente máximo hasta el cúal el método de diferencias finitas
 				con grilla uniforme creará la grilla. Su valor por defecto es -1, es decir, el método
 				elegirá la grilla adecuada.
-				
+
 				En caso de error retorna -1.
-				
+
 			\subparagraph{\texttt{int pm\_settings\_set\_tol(pm\_settings pms, double tol)}}
 				Establece la tolerancia a ser utilizada por el método de diferencias finitas.
-				Su valor por defecto es $10^{-9}$.			
-				
+				Su valor por defecto es $10^{-9}$.
+
 				En caso de error retorna -1.
-			
+
 			\subparagraph{\texttt{int pm\_settings\_set\_abstol(pm\_settings pms, double abstol)}}
 				Establece la tolerancia absoluta a ser utilizada por el método de diferencias finitas.
 				Su valor por defecto es $10^{-12}$.
-				
+
 				En caso de error retorna -1.
-				
+
 			\subparagraph{\texttt{int pm\_settings\_set\_iv\_max\_it(pm\_settings pms, int max\_iterations)}}
 				Establece el número máximo de iteraciones a ser realizadas por el método de la secante
 				para el cálculo de la volatilidad implícita. Su valor por defecto es 5.
-				
+
 				En caso de error retorna -1.
-				
+
 			\subparagraph{\texttt{int pm\_settings\_set\_iv\_eps(pm\_settings pms, double epsilon)}}
-				Establece la cota de error aceptable a ser utilizado por el método de la secante 
+				Establece la cota de error aceptable a ser utilizado por el método de la secante
 				para el cálculo de la volatilidad implícita. Su valor por defecto es $10^{-4}$.
-				
+
 				En caso de error retorna -1.
-				
+
 			\subparagraph{\texttt{int pm\_settings\_set\_iv\_init(pm\_settings pms, double guess\_vol0, double guess\_vol1)}}
 				Establece los valores iniciales a ser usados por el método de la secante para el cálculo
 				de la volatilidad implícita. Sus valores por defecto son 0.25 y 0.75.
-				
+
 				En caso de error retorna -1.
-				
+
 			\subparagraph{\texttt{int pm\_settings\_set\_extra\_data(pm\_settings pms, void *extra\_data)}}
 				Establece un dato extra el cual tal vez no fue cubierto por los campos descriptos anteriormente
 				para ser utilizado por el \texttt{pricing\_method}.
-				
+
 				En caso de error retorna -1.
-			
+
 			\subparagraph{Todas las funciones descritas anteriormente poseen su variante ``get''
 				 para la obtención del valor contenido en la estructura.}
-				
+
 		\subsubsection{pricing\_method.h}
-			
+
 			\subparagraph{\texttt{method\_id}}
 				Tipo enumerado de los métodos actualmente implementados en la librería.
-				Sus elementos son: 
+				Sus elementos son:
 				\begin{itemize}
 					\item \texttt{EU\_ANALYTIC}, la cual utiliza fórmulas analíticas
 						para los cálculos. Únicamente para opciones cuyo tipo de ejercicio es europeo.
 					\item \texttt{AM\_FD\_UG}, la cual utiliza una grilla uniforme y métodos
-						de diferencias finitas para los cálculos. Únicamente para opciones 
+						de diferencias finitas para los cálculos. Únicamente para opciones
 						cuyo tipo de ejercicio es americano.
 					\item \texttt{AM\_FD\_NUG}, la cual utiliza una grilla no uniforme y métodos
 						de diferencias finitas para los cálculos. Únicamente para opciones
 						cuyo tipo de ejercicio es americano.
 				\end{itemize}
-				
+
 			\subparagraph{\texttt{pricing\_method}}
 				Tipo de la estructura que contiene métodos para el cálculo de precio y griegas
-				de opciones.	
-				
+				de opciones.
+
 			\subparagraph{\texttt{pricing\_method new\_pricing\_method(method\_id id, volatility vol, risk\_free\_rate r, dividend d)}}
 				Crea una estructura del tipo \texttt{pricing\_method}. Se debe especificar el \texttt{method\_id},
 				la tasa libre de riesgo \texttt{risk\_free\_rate} y el dividendo \texttt{dividend}. La volatilidad
 				puede ser \texttt{NULL} caso se esté calculando la volatilidad implícita de la opción.
-				
+
 				En caso de error retorna \texttt{NULL}.
-				
+
 			\subparagraph{\texttt{void delete\_pricing\_method(pricing\_method pm)}}
 				Libera la memoria utilizada por la estructura \texttt{pricing\_method}.
-				
+
 			\subparagraph{\texttt{int pm\_set\_settings(pricing\_method pm, pm\_settings pms)}}
 				Establece la estuctura \texttt{pm\_settings} a ser utilizada por el \texttt{pricing\_method}.
 				Caso no se especificarse, se utilizan valores establecidos por defecto.
-				
+
 				En caso de error retorna -1.
-												
+
 		\subsubsection{result.h}
 			\subparagraph{\texttt{result}}
 				Tipo de la estructura donde se guardan resultados.
-			
+
 			\subparagraph{\texttt{result new\_result()}}
 				Crea una estructura vacía del tipo \texttt{result}.
-				
+
 				En caso de error retorna \texttt{NULL}.
-				
+
 			\subparagraph{\texttt{void delete\_result(result r)}}
 				Libera la memoria utilizada por la estructura.
-				
+
 			\subparagraph{\texttt{double result\_get\_price(result r)}}
 				Devuelve el valor del precio contenido en la estructura.
-				Requiere que se haya utilizado la estructura al menos una vez 
+				Requiere que se haya utilizado la estructura al menos una vez
 				con \texttt{option\_price(...)}. Caso contrario devolverá 0.
-				
+
 			\subparagraph{\texttt{double result\_get\_price\_precision(result r)}}
 				Devuelve la precisión del precio contenido en la estructura.
-				Requiere que se haya utilizado la estructura al menos una vez 
-				con \texttt{option\_price(...)} y \texttt{option\_price\_precision(...)}. 
-				Caso contrario devolverá 0.	
-				
+				Requiere que se haya utilizado la estructura al menos una vez
+				con \texttt{option\_price(...)} y \texttt{option\_price\_precision(...)}.
+				Caso contrario devolverá 0.
+
 			\subparagraph{\texttt{double result\_get\_prices(result r)}}
 				Devuelve el arreglo de precios contenido en la estructura.
-				Requiere que se haya utilizado la estructura al menos una vez 
+				Requiere que se haya utilizado la estructura al menos una vez
 				con \texttt{option\_prices(...)}. Caso contrario devolverá
 				\texttt{NULL}.
-				
+
 			\subparagraph{\texttt{double result\_get\_delta(result r)}}
 				Devuelve el valor del delta contenido en la estructura.
-				Requiere que se haya utilizado la estructura al menos una vez 
+				Requiere que se haya utilizado la estructura al menos una vez
 				con \texttt{option\_delta(...)}. Caso contrario devolverá 0.
-				
+
 			\subparagraph{\texttt{double result\_get\_gamma(result r)}}
 				Devuelve el valor del gamma contenido en la estructura.
-				Requiere que se haya utilizado la estructura al menos una vez 
+				Requiere que se haya utilizado la estructura al menos una vez
 				con \texttt{option\_gamma(...)}. Caso contrario devolverá 0.
-				
+
 			\subparagraph{\texttt{double result\_get\_theta(result r)}}
 				Devuelve el valor del theta contenido en la estructura.
-				Requiere que se haya utilizado la estructura al menos una vez 
+				Requiere que se haya utilizado la estructura al menos una vez
 				con \texttt{option\_theta(...)}. Caso contrario devolverá 0.
-				
+
 			\subparagraph{\texttt{double result\_get\_rho(result r)}}
 				Devuelve el valor del rho contenido en la estructura.
-				Requiere que se haya utilizado la estructura al menos una vez 
+				Requiere que se haya utilizado la estructura al menos una vez
 				con \texttt{option\_rho(...)}. Caso contrario devolverá 0.
-				
+
 			\subparagraph{\texttt{double result\_get\_vega(result r)}}
 				Devuelve el valor del vega contenido en la estructura.
-				Requiere que se haya utilizado la estructura al menos una vez 
+				Requiere que se haya utilizado la estructura al menos una vez
 				con \texttt{option\_vega(...)}. Caso contrario devolverá 0.
-				
+
 			\subparagraph{\texttt{double result\_get\_impl\_vol(result r)}}
 				Devuelve el valor de la volatilidad implícita contenido en la estructura.
-				Requiere que se haya utilizado la estructura al menos una vez 
+				Requiere que se haya utilizado la estructura al menos una vez
 				con \texttt{option\_impl\_vol(...)}. Caso contrario devolverá 0.
-				
+
 		\subsubsection{risk\_free\_rate.h}
-			
+
 			\subparagraph{\texttt{risk\_free\_rate}}
 				Tipo de la estructura que representa una tasa libre de riesgo.
-				
+
 			\subparagraph{\texttt{risk\_free\_rate new\_risk\_free\_rate(double val)}}
 				Crea una estructura del tipo \texttt{risk\_free\_rate}. Toma como argumento
 				la tasa en decimal (ej.: 10\% = 0.1).
-				
+
 				En caso de error retorna \texttt{NULL}.
-				
+
 			\subparagraph{\texttt{void delete\_risk\_free\_rate(risk\_free\_rate rfr)}}
 				Libera la memoria utilizada por la estructura.
-				
+
 			\subparagraph{\texttt{int rfr\_set\_value(risk\_free\_rate rfr, double val)}}
 				Actualiza el valor de la tasa libre de riesgo almacenado en la estructura.
-				
+
 				En caso de error retorna -1.
-				
+
 			\subparagraph{\texttt{double rfr\_get\_value(risk\_free\_rate rfr)}}
 				Devuelve el valor de la tasa libre de riesgo almacenado en la estructura.
-				
+
 		\subsubsection{time\_period.h}
-			
+
 			\subparagraph{\texttt{date}}
 				Tipo que representa un momento en un periodo de tiempo.
-				
+
 			\subparagraph{\texttt{time\_period}}
 				Tipo de la estructura que representa un periodo de tiempo. La estructura
 				también contiene el número de días activos en el año.
-				
+
 			\subparagraph{\texttt{time\_period new\_time\_period(int days\_per\_year)}}
 				Crea una estructura del tipo \texttt{time\_period}. Toma como argumento
 				el número de días activos en el año. El periodo inicialmente se encuentra vacío.
-				
+
 				En caso de error retorna \texttt{NULL}.
-				
+
 			\subparagraph{\texttt{time\_period new\_time\_period\_365d()}}
 				Equivalente a \texttt{new\_time\_period(365)}.
-				
+
 			\subparagraph{\texttt{time\_period new\_time\_period\_252d()}}
 				Equivalente a \texttt{new\_time\_period(252)}.
-				
+
 			\subparagraph{\texttt{void delete\_time\_period(time\_period tp)}}
 				Libera la memoria utilizada por la estructura.
-				
+
 			\subparagraph{\texttt{int tp\_set\_days(time\_period tp, int days)}}
 				Actualiza el valor del periodo de tiempo para abarcar el número de días
 				especificado en \texttt{days}.
-				
+
 				En caso de error retorna -1.
-				
+
 			\subparagraph{\texttt{DAYS(time\_period tp, int days}}
 				Macro que equivale a \texttt{tp\_set\_days(tp, days)} para luego devolver
 				la estructura.
-				
+
 			\subparagraph{\texttt{int tp\_set\_years(time\_period tp, int years)}}
 				Actualiza el valor del periodo de tiempo para abarcar el número de años
-				especificado en \texttt{years}. Equivalente a 
+				especificado en \texttt{years}. Equivalente a
 				\texttt{tp\_set\_days(tp, n * days\_per\_year)}, donde \texttt{n}
 				es el número de años y \texttt{days\_per\_year} es el número de días
 				activos que utilizamos al momento de crear la estructura.
-				
+
 				En caso de error retorna -1.
-				
+
 			\subparagraph{\texttt{YEARS(time\_period tp, int years}}
 				Macro que equivale a \texttt{tp\_set\_years(tp, years)} para luego devolver
 				la estructura.
-				
+
 			\subparagraph{\texttt{date tp\_get\_date(time\_period tp)}}
 				Retorna el momento final en el periodo de tiempo.
-				
+
 			\subparagraph{\texttt{double tp\_get\_period(time\_period tp)}}
 				Retorna el valor que representaría un único día activo.
-			
+
 			\subparagraph{\texttt{date tp\_int\_to\_date(time\_period tp, int days)}}
 				Transforma un número de días al formato \texttt{date}.
-				
+
 			\subparagraph{\texttt{int tp\_date\_to\_int(time\_period tp, date date)}}
 				Transforma un momento en un periodo de tiempo al equivalente en número de días.
-			
+
 		\subsubsection{volatility.h}
 
 			\subparagraph{\texttt{volatility}}
 				Tipo de la estructura que representa una volatilidad.
-				
+
 			\subparagraph{\texttt{volatility new\_volatility(double val)}}
 				Crea una estructura del tipo \texttt{volatility}. Toma como argumento
 				el valor de la volatilidad en decimal (ej.: 10\% = 0.1).
-				
+
 				En caso de error retorna \texttt{NULL}.
-				
+
 			\subparagraph{\texttt{void delete\_volatility(volatility vol)}}
 				Libera la memoria utilizada por la estructura.
-				
+
 			\subparagraph{\texttt{int vol\_set\_value(volatility vol, double val)}}
 				Actualiza el valor de la volatilidad almacenado en la estructura.
-				
+
 				En caso de error retorna -1.
-				
+
 			\subparagraph{\texttt{double vol\_get\_value(volatility vol)}}
-				Devuelve el valor de la volatilidad almacenado en la estructura.			
-			
+				Devuelve el valor de la volatilidad almacenado en la estructura.
+
 \section{Extensión de la librería}
 	\subsection{Como agregar un nuevo \texttt{pricing\_method}}
-		Dentro de la cabecera \texttt{pricing\_method\_internal.h} se encuentra 
+		Dentro de la cabecera \texttt{pricing\_method\_internal.h} se encuentra
 		la función \texttt{new\_pricing\_method\_(...)} la cual es utilizada
 		para la creación de una nueva estructura del tipo \texttt{pricing\_method}.
-		Esta función no es accesible a través de la interfaz de la librería, y es utilizada 
+		Esta función no es accesible a través de la interfaz de la librería, y es utilizada
 		por los métodos internos ya programados para crear la estructura que si lo es.
-		
+
 		La función acepta como argumentos los métodos encargados de realizar los cálculos
 		necesarios para la obtención de precios, griegas y volatilidades implícitas, también recibe un dato
 		extra que puede ser necesario por los métodos durante los cálculos más una función para liberar
 		la memoria utilizada por éste, y por último valor de volatilidad, tasa libre de riesgo y dividendo
 		empaquetados en una estructura descripta en \texttt{pricing\_data.h}. Los tipos de las funciones
 		utilizadas para los cálculos se pueden encontrar en \texttt{common.h}.
-				
+
 		Como ejemplo se puede ver la implementación del \texttt{pricing\_method} para opciones europeas,
 		en \texttt{pricing\_methods/european/european\_analytic.c}. Cada método encargado de algún cálculo
 		se programa de forma estática, es decir, no es accesible fuera de este archivo. La única
 		función exportada es \texttt{new\_european\_analytic(...)}, como podemos ver en su cabecera.
 		Su único trabajo es invocar a \texttt{new\_pricing\_method\_(...)} con las funciones estáticas
 		devolviendo así una estructura \texttt{pricing\_method} la cual puede ser utilizada por el usuario final.
-		
+
 		Sólo resta añadir una forma de que el usuario la llame, de ello se encarga \texttt{new\_pricing\_method(...)},
 		en \texttt{pricing\_method.c}. Ésta última realiza la invocación dependiendo del identificador del método
 		entregado como parámetro. Siguiendo el ejemplo, para agregar el constructor del \texttt{pricing\_method} de
 		opciones europeas, se debe incluír su cabecera en \texttt{pricing\_method\_internal.h}, luego
 		añadir un identificador al tipo enumerado \texttt{method\_id} en \texttt{pricing\_method.h} (en este caso,
-		es \texttt{EU\_ANALYTIC}) y por último modificar \texttt{new\_pricing\_method(...)} 
+		es \texttt{EU\_ANALYTIC}) y por último modificar \texttt{new\_pricing\_method(...)}
 		en \texttt{pricing\_method.c} para caso sea ese el identificador entregado como parametro se invoque a
-		la función constructora correspondiente del nuevo \texttt{pricing\_method} (en el ejemplo, 
-		\texttt{new\_european\_analytic(...)}). 
-		
+		la función constructora correspondiente del nuevo \texttt{pricing\_method} (en el ejemplo,
+		\texttt{new\_european\_analytic(...)}).
+
 \section{Ejemplos}
 	En la carpeta \texttt{examples} en la raíz del proyecto se pueden encontrar diferentes ejemplos
 	de uso de la librería. Cada ejemplo viene acompañado de comentarios que explican las características
 	de la opción o del proceso que estamos realizando.
-	
-	En el caso de la solución para C\#, ésta cuenta con los mismos ejemplos.	
+
+	En el caso de la solución para C\#, ésta cuenta con los mismos ejemplos.
 \printindex
 
 \end{document}
